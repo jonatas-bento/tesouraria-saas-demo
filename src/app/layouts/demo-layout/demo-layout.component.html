@@ -1,0 +1,11 @@
+<div class="demo-layout">
+  <app-sidebar />
+  
+  <div class="demo-main">
+    <app-demo-header (menuToggle)="onMenuToggle()" />
+    
+    <main class="demo-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

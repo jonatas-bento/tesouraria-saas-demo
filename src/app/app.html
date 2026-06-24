@@ -1,0 +1,27 @@
+<!-- Demo Badge -->
+@if (showDemoBadge()) {
+  <div class="demo-badge">
+    🚧 MODO DEMO
+  </div>
+}
+
+<!-- Main Content -->
+<div class="app-container">
+  <header class="app-header">
+    <h1>{{ title() }}</h1>
+    <p class="tagline">{{ brand.tagline }}</p>
+  </header>
+
+  <main class="app-main">
+    <router-outlet />
+  </main>
+
+  <footer class="app-footer">
+    <p>&copy; 2026 {{ brand.name }} - v{{ config.version }}</p>
+    @if (isDemoMode()) {
+      <p class="demo-notice">
+        ⚠️ Aplicação em modo demonstração - Operações de escrita desabilitadas
+      </p>
+    }
+  </footer>
+</div>

@@ -1,0 +1,131 @@
+@use '../../../../styles/variables' as *;
+@use 'sass:color';
+
+.header {
+  background-color: $white;
+  box-shadow: $shadow-sm;
+  position: sticky;
+  top: 0;
+  z-index: $z-index-sticky;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-md $spacing-lg;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-brand {
+  .brand-link {
+    text-decoration: none;
+    color: $primary-color;
+    font-size: $font-size-xl;
+    font-weight: $font-weight-bold;
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+  }
+
+  .brand-name {
+    color: $secondary-color;
+  }
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+
+  .nav-link {
+    text-decoration: none;
+    color: $gray-700;
+    font-weight: $font-weight-medium;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-md;
+    transition: all $transition-fast;
+
+    &:hover {
+      color: $primary-color;
+      background-color: $gray-100;
+    }
+
+    &.active {
+      color: $primary-color;
+      font-weight: $font-weight-bold;
+    }
+
+    &.nav-link-cta {
+      background-color: $primary-color;
+      color: $white;
+      padding: $spacing-sm $spacing-lg;
+
+      &:hover {
+        background-color: color.adjust($primary-color, $lightness: -10%, $space: hsl);
+      }
+    }
+  }
+}
+
+.mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: $spacing-sm;
+
+  .hamburger-line {
+    width: 24px;
+    height: 2px;
+    background-color: $secondary-color;
+    transition: all $transition-fast;
+  }
+}
+
+// Responsividade
+@media (max-width: $breakpoint-md) {
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  .header-nav {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background-color: $white;
+    flex-direction: column;
+    align-items: stretch;
+    padding: $spacing-lg;
+    box-shadow: $shadow-lg;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all $transition-base;
+
+    &.mobile-open {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .nav-link {
+      text-align: center;
+      padding: $spacing-md;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .header-container {
+    padding: $spacing-md;
+  }
+
+  .brand-name {
+    font-size: $font-size-lg;
+  }
+}

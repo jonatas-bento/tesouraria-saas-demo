@@ -1,0 +1,72 @@
+@use '../../../../styles/variables' as *;
+
+.demo-header {
+  background-color: $white;
+  box-shadow: $shadow-sm;
+  position: sticky;
+  top: 0;
+  z-index: $z-index-sticky;
+  border-bottom: 2px solid $primary-color;
+}
+
+.demo-header-container {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.menu-toggle {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: $spacing-sm;
+
+  .hamburger-line {
+    width: 24px;
+    height: 2px;
+    background-color: $secondary-color;
+    transition: all $transition-fast;
+  }
+
+  &:hover .hamburger-line {
+    background-color: $primary-color;
+  }
+}
+
+.demo-header-content {
+  display: flex;
+  align-items: center;
+  gap: $spacing-lg;
+  flex: 1;
+}
+
+.demo-header-title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $secondary-color;
+  margin: 0;
+}
+
+@media (max-width: $breakpoint-md) {
+  .demo-header-container {
+    padding: $spacing-md;
+  }
+
+  .demo-header-title {
+    font-size: $font-size-lg;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .demo-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $spacing-sm;
+  }
+}

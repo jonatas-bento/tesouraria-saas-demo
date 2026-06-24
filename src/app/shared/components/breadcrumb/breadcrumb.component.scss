@@ -1,0 +1,50 @@
+@use '../../../../styles/variables' as *;
+@use 'sass:color';
+
+.breadcrumb {
+  padding: $spacing-md 0;
+}
+
+.breadcrumb-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $spacing-sm;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  font-size: $font-size-sm;
+}
+
+.breadcrumb-link {
+  color: $primary-color;
+  text-decoration: none;
+  transition: color $transition-fast;
+
+  &:hover {
+    color: color.adjust($primary-color, $lightness: -10%, $space: hsl);
+    text-decoration: underline;
+  }
+}
+
+.breadcrumb-current {
+  color: $gray-700;
+  font-weight: $font-weight-medium;
+}
+
+.breadcrumb-separator {
+  color: $gray-500;
+  user-select: none;
+}
+
+@media (max-width: $breakpoint-sm) {
+  .breadcrumb-item {
+    font-size: $font-size-sm;
+  }
+}

@@ -1,0 +1,150 @@
+@use '../../../../styles/variables' as *;
+@use 'sass:color';
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background-color: $white;
+  box-shadow: $shadow-lg;
+  display: flex;
+  flex-direction: column;
+  z-index: $z-index-fixed;
+  transition: transform $transition-base;
+}
+
+.sidebar-header {
+  padding: $spacing-lg;
+  border-bottom: 1px solid $gray-200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-title {
+  font-size: $font-size-xl;
+  font-weight: $font-weight-bold;
+  color: $secondary-color;
+  margin: 0;
+}
+
+.sidebar-close {
+  display: none;
+  background: none;
+  border: none;
+  font-size: $font-size-xxl;
+  color: $gray-600;
+  cursor: pointer;
+  padding: $spacing-xs;
+  line-height: 1;
+
+  &:hover {
+    color: $secondary-color;
+  }
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: $spacing-md 0;
+  overflow-y: auto;
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md $spacing-lg;
+  color: $gray-700;
+  text-decoration: none;
+  transition: all $transition-fast;
+  border-left: 3px solid transparent;
+
+  &:hover {
+    background-color: $gray-100;
+    color: $primary-color;
+  }
+
+  &.active {
+    background-color: color.adjust($primary-color, $lightness: 45%, $space: hsl);
+    color: $primary-color;
+    border-left-color: $primary-color;
+    font-weight: $font-weight-medium;
+  }
+}
+
+.sidebar-icon {
+  font-size: $font-size-xl;
+  width: 24px;
+  text-align: center;
+}
+
+.sidebar-text {
+  font-size: $font-size-base;
+}
+
+.sidebar-footer {
+  padding: $spacing-md;
+  border-top: 1px solid $gray-200;
+}
+
+.sidebar-link-back {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  padding: $spacing-md;
+  color: $gray-600;
+  text-decoration: none;
+  border-radius: $border-radius-md;
+  transition: all $transition-fast;
+
+  &:hover {
+    background-color: $gray-100;
+    color: $primary-color;
+  }
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+// Responsividade
+@media (max-width: $breakpoint-lg) {
+  .sidebar {
+    transform: translateX(-100%);
+
+    &.open {
+      transform: translateX(0);
+    }
+  }
+
+  .sidebar-close {
+    display: block;
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: $z-index-modal-backdrop;
+    opacity: 0;
+    visibility: hidden;
+    transition: all $transition-base;
+
+    &.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .sidebar {
+    width: 280px;
+  }
+}

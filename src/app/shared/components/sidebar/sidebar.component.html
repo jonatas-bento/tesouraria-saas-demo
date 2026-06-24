@@ -1,0 +1,77 @@
+<aside class="sidebar" [class.open]="sidebarOpen()">
+  <div class="sidebar-header">
+    <h2 class="sidebar-title">Menu</h2>
+    <button
+      class="sidebar-close"
+      (click)="closeSidebar()"
+      aria-label="Fechar menu"
+    >
+      ✕
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a
+      routerLink="/demo/dashboard"
+      routerLinkActive="active"
+      class="sidebar-link"
+      (click)="closeSidebar()"
+    >
+      <span class="sidebar-icon">📊</span>
+      <span class="sidebar-text">Dashboard</span>
+    </a>
+
+    <a
+      routerLink="/demo/entradas"
+      routerLinkActive="active"
+      class="sidebar-link"
+      (click)="closeSidebar()"
+    >
+      <span class="sidebar-icon">💰</span>
+      <span class="sidebar-text">Entradas</span>
+    </a>
+
+    <a
+      routerLink="/demo/despesas"
+      routerLinkActive="active"
+      class="sidebar-link"
+      (click)="closeSidebar()"
+    >
+      <span class="sidebar-icon">💳</span>
+      <span class="sidebar-text">Despesas</span>
+    </a>
+
+    <a
+      routerLink="/demo/balancete"
+      routerLinkActive="active"
+      class="sidebar-link"
+      (click)="closeSidebar()"
+    >
+      <span class="sidebar-icon">📈</span>
+      <span class="sidebar-text">Balancete</span>
+    </a>
+
+    <a
+      routerLink="/demo/relatorios"
+      routerLinkActive="active"
+      class="sidebar-link"
+      (click)="closeSidebar()"
+    >
+      <span class="sidebar-icon">📄</span>
+      <span class="sidebar-text">Relatórios</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <a routerLink="/" class="sidebar-link-back">
+      <span class="sidebar-icon">🏠</span>
+      <span class="sidebar-text">Voltar ao Site</span>
+    </a>
+  </div>
+</aside>
+
+<div
+  class="sidebar-overlay"
+  [class.visible]="sidebarOpen()"
+  (click)="closeSidebar()"
+></div>

@@ -1,0 +1,63 @@
+/* You can add global styles to this file, and also import other style files */
+
+// Importar variáveis
+@use 'styles/variables' as *;
+
+// Reset e normalização
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: $font-size-base;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-normal;
+  line-height: $line-height-base;
+  color: $gray-900;
+  background-color: $gray-50;
+}
+
+// Utilitários globais
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 $spacing-md;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+// Badge de demo
+.demo-badge {
+  position: fixed;
+  top: $spacing-md;
+  right: $spacing-md;
+  background-color: $warning-color;
+  color: $white;
+  padding: $spacing-xs $spacing-md;
+  border-radius: $border-radius-md;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+  box-shadow: $shadow-lg;
+  z-index: $z-index-tooltip;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}

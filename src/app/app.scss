@@ -1,0 +1,74 @@
+@use '../styles/variables' as *;
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background: linear-gradient(135deg, $primary-color 0%, $accent-color 100%);
+  color: $white;
+  padding: $spacing-xl $spacing-md;
+  text-align: center;
+  box-shadow: $shadow-md;
+
+  h1 {
+    font-size: $font-size-xxl;
+    font-weight: $font-weight-bold;
+    margin: 0 0 $spacing-sm 0;
+  }
+
+  .tagline {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-light;
+    margin: 0;
+    opacity: 0.9;
+  }
+}
+
+.app-main {
+  flex: 1;
+  padding: $spacing-lg $spacing-md;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.app-footer {
+  background-color: $gray-800;
+  color: $white;
+  padding: $spacing-lg $spacing-md;
+  text-align: center;
+  margin-top: auto;
+
+  p {
+    margin: $spacing-xs 0;
+    font-size: $font-size-sm;
+  }
+
+  .demo-notice {
+    color: $warning-color;
+    font-weight: $font-weight-medium;
+    margin-top: $spacing-sm;
+  }
+}
+
+// Responsividade
+@media (max-width: $breakpoint-md) {
+  .app-header {
+    padding: $spacing-lg $spacing-md;
+
+    h1 {
+      font-size: $font-size-xl;
+    }
+
+    .tagline {
+      font-size: $font-size-base;
+    }
+  }
+
+  .app-main {
+    padding: $spacing-md;
+  }
+}
