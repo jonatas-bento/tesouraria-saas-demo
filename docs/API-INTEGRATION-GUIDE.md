@@ -38,14 +38,14 @@ Todos os modelos estão definidos em `src/app/core/models/transaction.model.ts`:
 
 ### Base URL
 ```
-Desenvolvimento: http://localhost:3000/api
-Produção: https://api.tesouraria.com/api
+Desenvolvimento: {API_BASE_URL}
+Produção: {API_BASE_URL}
 ```
 
 ### Autenticação
 ```
 Tipo: Bearer Token (JWT)
-Header: Authorization: Bearer {token}
+Header: Authorization: Bearer {ACCESS_TOKEN}
 ```
 
 ---
@@ -347,7 +347,7 @@ import {
   providedIn: 'root',
 })
 export class TreasuryApiService {
-  private readonly baseUrl = 'http://localhost:3000/api';
+  private readonly baseUrl = '{API_BASE_URL}';
 
   constructor(private http: HttpClient) {}
 
