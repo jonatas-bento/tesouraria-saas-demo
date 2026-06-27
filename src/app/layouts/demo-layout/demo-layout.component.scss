@@ -12,6 +12,7 @@
   flex-direction: column;
   margin-left: 260px;
   transition: margin-left $transition-base;
+  min-width: 0; // Previne overflow em flex items
 }
 
 .demo-content {
@@ -20,6 +21,7 @@
   max-width: 1400px;
   width: 100%;
   margin: 0 auto;
+  overflow-x: hidden; // Previne scroll horizontal
 }
 
 @media (max-width: $breakpoint-lg) {

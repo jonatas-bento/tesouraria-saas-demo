@@ -145,6 +145,27 @@
 
 @media (max-width: $breakpoint-sm) {
   .sidebar {
-    width: 280px;
+    width: 85%;
+    max-width: 300px;
+  }
+
+  .sidebar-header {
+    padding: $spacing-md;
+  }
+
+  .sidebar-title {
+    font-size: $font-size-lg;
+  }
+
+  .sidebar-link {
+    padding: $spacing-sm $spacing-md;
+  }
+
+  .sidebar-icon {
+    font-size: $font-size-lg;
+  }
+
+  .sidebar-text {
+    font-size: $font-size-sm;
   }
 }

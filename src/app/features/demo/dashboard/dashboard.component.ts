@@ -242,10 +242,19 @@ import { DashboardSummary, Transaction } from '../../../core/models/transaction.
 
       .summary-cards {
         grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .card {
+        padding: 1rem;
+      }
+
+      .card .amount {
+        font-size: 1.5rem;
       }
 
       .transactions-table {
-        padding: 1rem;
+        padding: 0.75rem;
       }
 
       table {
@@ -253,7 +262,29 @@ import { DashboardSummary, Transaction } from '../../../core/models/transaction.
       }
 
       th, td {
+        padding: 0.5rem 0.25rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .dashboard-page {
         padding: 0.5rem;
+      }
+
+      .summary-cards {
+        gap: 0.75rem;
+      }
+
+      .card .amount {
+        font-size: 1.3rem;
+      }
+
+      table {
+        font-size: 0.75rem;
+      }
+
+      th, td {
+        padding: 0.4rem 0.2rem;
       }
     }
   `]

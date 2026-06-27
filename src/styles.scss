@@ -1,7 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
 
 // Importar variáveis
+@use 'sass:color';
 @use 'styles/variables' as *;
+@use 'styles/responsive-tables';
 
 // Reset e normalização
 * {
@@ -14,6 +16,7 @@ html {
   font-size: $font-size-base;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 body {
@@ -23,6 +26,7 @@ body {
   line-height: $line-height-base;
   color: $gray-900;
   background-color: $gray-50;
+  overflow-x: hidden;
 }
 
 // Utilitários globais
@@ -45,6 +49,21 @@ body {
   text-align: left;
 }
 
+// Prevenir quebra de texto em elementos importantes
+h1, h2, h3, h4, h5, h6 {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+// Melhorar contraste de links
+a {
+  color: $primary-color;
+  
+  &:hover {
+    color: color.adjust($primary-color, $lightness: -10%, $space: hsl);
+  }
+}
+
 // Badge de demo
 .demo-badge {
   position: fixed;
@@ -60,4 +79,11 @@ body {
   z-index: $z-index-tooltip;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+// Responsividade global
+@media (max-width: $breakpoint-sm) {
+  html {
+    font-size: 14px;
+  }
 }

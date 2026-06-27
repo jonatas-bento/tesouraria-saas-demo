@@ -1,0 +1,68 @@
+/**
+ * Responsive Tables Utility
+ * 
+ * Estilos para tornar tabelas responsivas em dispositivos móveis
+ */
+
+@use 'variables' as *;
+
+.transactions-table,
+.balance-sheet-table {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+
+  table {
+    min-width: 600px;
+    width: 100%;
+  }
+
+  @media (max-width: $breakpoint-md) {
+    table {
+      font-size: $font-size-sm;
+    }
+
+    th,
+    td {
+      padding: $spacing-sm;
+      white-space: nowrap;
+    }
+  }
+
+  @media (max-width: $breakpoint-sm) {
+    border-radius: $border-radius-md;
+    
+    table {
+      font-size: 12px;
+    }
+
+    th,
+    td {
+      padding: $spacing-xs $spacing-sm;
+    }
+  }
+}
+
+// Scroll indicator para tabelas
+.transactions-table,
+.balance-sheet-table {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 30px;
+    background: linear-gradient(to left, rgba(255, 255, 255, 0.9), transparent);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity $transition-fast;
+  }
+
+  &:not(:hover)::after {
+    @media (max-width: $breakpoint-md) {
+      opacity: 1;
+    }
+  }
+}

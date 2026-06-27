@@ -32,14 +32,35 @@ import { Component } from '@angular/core';
       white-space: nowrap;
     }
 
-    @media (max-width: 576px) {
+    @media (max-width: 768px) {
       .demo-badge {
+        position: static;
+        display: inline-flex;
         font-size: 12px;
         padding: 6px 12px;
       }
 
       .demo-badge-icon {
         font-size: 14px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .demo-badge {
+        font-size: 11px;
+        padding: 5px 10px;
+      }
+
+      .demo-badge-icon {
+        font-size: 12px;
+      }
+
+      .demo-badge-text {
+        display: none;
+      }
+
+      .demo-badge::after {
+        content: 'DEMO';
       }
     }
   `]
