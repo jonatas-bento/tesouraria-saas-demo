@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-badge.component';
-import { MockDataService } from '../../../core/services/mock-data.service';
+import { DATA_SERVICE_TOKEN } from '../../../core/services/data.service.token';
 import { Transaction } from '../../../core/models/transaction.model';
 
 @Component({
@@ -237,14 +237,14 @@ import { Transaction } from '../../../core/models/transaction.model';
 export class EntradasComponent implements OnInit {
   incomeTransactions: Transaction[] = [];
 
-  constructor(private mockDataService: MockDataService) {}
+  private readonly dataService = inject(DATA_SERVICE_TOKEN);
 
   ngOnInit(): void {
     this.loadIncomeTransactions();
   }
 
   loadIncomeTransactions(): void {
-    this.mockDataService.getIncomeTransactions().subscribe((transactions) => {
+    this.dataService.getIncomeTransactions().subscribe((transactions) => {
       this.incomeTransactions = transactions.sort(
         (a, b) => b.date.getTime() - a.date.getTime()
       );

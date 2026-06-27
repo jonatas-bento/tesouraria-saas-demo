@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-badge.component';
-import { MockDataService } from '../../../core/services/mock-data.service';
+import { DATA_SERVICE_TOKEN } from '../../../core/services/data.service.token';
 import { Report } from '../../../core/models/transaction.model';
 
 @Component({
@@ -323,14 +323,14 @@ import { Report } from '../../../core/models/transaction.model';
 export class RelatoriosComponent implements OnInit {
   reports: Report[] = [];
 
-  constructor(private mockDataService: MockDataService) {}
+  private readonly dataService = inject(DATA_SERVICE_TOKEN);
 
   ngOnInit(): void {
     this.loadReports();
   }
 
   loadReports(): void {
-    this.mockDataService.getReports().subscribe((reports) => {
+    this.dataService.getReports().subscribe((reports) => {
       this.reports = reports.sort(
         (a, b) => b.generatedAt.getTime() - a.generatedAt.getTime()
       );

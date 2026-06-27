@@ -72,8 +72,8 @@ import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-b
           <ul>
             <li>Esta é uma versão de demonstração com dados fictícios</li>
             <li>Nenhuma operação de escrita é permitida</li>
-            <li>Não há integração com APIs ou serviços externos</li>
-            <li>Os dados são carregados localmente via serviços mockados</li>
+            <li>Os dados são carregados via API NestJS (<code>localhost:3000</code>)</li>
+            <li>Se a API estiver offline, fallback automático para dados mockados locais</li>
           </ul>
         </div>
       </div>

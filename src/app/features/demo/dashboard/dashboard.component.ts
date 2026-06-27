@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-badge.component';
-import { MockDataService } from '../../../core/services/mock-data.service';
+import { DATA_SERVICE_TOKEN } from '../../../core/services/data.service.token';
 import { DashboardSummary, Transaction } from '../../../core/models/transaction.model';
 
 @Component({
@@ -298,18 +298,18 @@ export class DashboardComponent implements OnInit {
   };
   recentTransactions: Transaction[] = [];
 
-  constructor(private mockDataService: MockDataService) {}
+  private readonly dataService = inject(DATA_SERVICE_TOKEN);
 
   ngOnInit(): void {
     this.loadDashboardData();
   }
 
   loadDashboardData(): void {
-    this.mockDataService.getDashboardSummary().subscribe((summary) => {
+    this.dataService.getDashboardSummary().subscribe((summary) => {
       this.summary = summary;
     });
 
-    this.mockDataService.getAllTransactions().subscribe((transactions) => {
+    this.dataService.getAllTransactions().subscribe((transactions) => {
       this.recentTransactions = transactions
         .sort((a, b) => b.date.getTime() - a.date.getTime())
         .slice(0, 5);

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-badge.component';
-import { MockDataService } from '../../../core/services/mock-data.service';
+import { DATA_SERVICE_TOKEN } from '../../../core/services/data.service.token';
 import { BalanceSheetItem } from '../../../core/models/transaction.model';
 
 @Component({
@@ -306,14 +306,14 @@ import { BalanceSheetItem } from '../../../core/models/transaction.model';
 export class BalanceteComponent implements OnInit {
   balanceSheetItems: BalanceSheetItem[] = [];
 
-  constructor(private mockDataService: MockDataService) {}
+  private readonly dataService = inject(DATA_SERVICE_TOKEN);
 
   ngOnInit(): void {
     this.loadBalanceSheet();
   }
 
   loadBalanceSheet(): void {
-    this.mockDataService.getBalanceSheet().subscribe((items) => {
+    this.dataService.getBalanceSheet().subscribe((items) => {
       this.balanceSheetItems = items;
     });
   }
