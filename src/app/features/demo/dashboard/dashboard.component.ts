@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-badge.component';
 import { DATA_SERVICE_TOKEN } from '../../../core/services/data.service.token';
@@ -21,21 +21,21 @@ import { DashboardSummary, Transaction } from '../../../core/models/transaction.
       <div class="summary-cards">
         <div class="card income">
           <h3>Total de Entradas</h3>
-          <p class="amount">{{ summary.totalIncome | currency: 'BRL' }}</p>
+          <p class="amount">{{ summary().totalIncome | currency: 'BRL' }}</p>
         </div>
         <div class="card expense">
           <h3>Total de Despesas</h3>
-          <p class="amount">{{ summary.totalExpenses | currency: 'BRL' }}</p>
+          <p class="amount">{{ summary().totalExpenses | currency: 'BRL' }}</p>
         </div>
         <div class="card balance">
           <h3>Saldo</h3>
-          <p class="amount" [class.negative]="summary.balance < 0">
-            {{ summary.balance | currency: 'BRL' }}
+          <p class="amount" [class.negative]="summary().balance < 0">
+            {{ summary().balance | currency: 'BRL' }}
           </p>
         </div>
         <div class="card pending">
           <h3>Transações Pendentes</h3>
-          <p class="amount">{{ summary.pendingTransactions }}</p>
+          <p class="amount">{{ summary().pendingTransactions }}</p>
         </div>
       </div>
 
@@ -54,7 +54,7 @@ import { DashboardSummary, Transaction } from '../../../core/models/transaction.
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let transaction of recentTransactions">
+              <tr *ngFor="let transaction of recentTransactions()">
                 <td>{{ transaction.date | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ transaction.description }}</td>
                 <td>{{ transaction.category }}</td>
@@ -290,13 +290,14 @@ import { DashboardSummary, Transaction } from '../../../core/models/transaction.
   `]
 })
 export class DashboardComponent implements OnInit {
-  summary: DashboardSummary = {
-    totalIncome: 0,
-    totalExpenses: 0,
-    balance: 0,
-    pendingTransactions: 0,
-  };
-  recentTransactions: Transaction[] = [];
+  summary = signal<DashboardSummary>({
+  totalIncome: 0,
+  totalExpenses: 0,
+  balance: 0,
+  pendingTransactions: 0,
+});
+
+recentTransactions = signal<Transaction[]>([]);
 
   private readonly dataService = inject(DATA_SERVICE_TOKEN);
 
@@ -305,16 +306,29 @@ export class DashboardComponent implements OnInit {
   }
 
   loadDashboardData(): void {
-    this.dataService.getDashboardSummary().subscribe((summary) => {
-      this.summary = summary;
-    });
+  this.dataService.getDashboardSummary().subscribe({
+    next: (summary) => {
+      this.summary.set(summary);
+    },
+    error: (error) => {
+      console.error('[Dashboard] erro ao carregar summary:', error);
+    },
+  });
 
-    this.dataService.getAllTransactions().subscribe((transactions) => {
-      this.recentTransactions = transactions
-        .sort((a, b) => b.date.getTime() - a.date.getTime())
-        .slice(0, 5);
-    });
-  }
+  this.dataService.getAllTransactions().subscribe({
+    next: (transactions) => {
+      this.recentTransactions.set(
+        transactions
+          .slice()
+          .sort((a, b) => b.date.getTime() - a.date.getTime())
+          .slice(0, 5)
+      );
+    },
+    error: (error) => {
+      console.error('[Dashboard] erro ao carregar transactions:', error);
+    },
+  });
+}
 
   getStatusLabel(status: string): string {
     const labels: Record<string, string> = {

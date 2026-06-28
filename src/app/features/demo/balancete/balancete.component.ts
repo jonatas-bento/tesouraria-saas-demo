@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-badge.component';
 import { DATA_SERVICE_TOKEN } from '../../../core/services/data.service.token';
@@ -48,7 +48,7 @@ import { BalanceSheetItem } from '../../../core/models/transaction.model';
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let item of balanceSheetItems">
+              <tr *ngFor="let item of balanceSheetItems()">
                 <td class="account-name">{{ item.account }}</td>
                 <td class="number debit">
                   {{ item.debit > 0 ? (item.debit | currency: 'BRL') : '-' }}
@@ -304,7 +304,7 @@ import { BalanceSheetItem } from '../../../core/models/transaction.model';
   `]
 })
 export class BalanceteComponent implements OnInit {
-  balanceSheetItems: BalanceSheetItem[] = [];
+  balanceSheetItems = signal<BalanceSheetItem[]>([]);
 
   private readonly dataService = inject(DATA_SERVICE_TOKEN);
 
@@ -314,19 +314,19 @@ export class BalanceteComponent implements OnInit {
 
   loadBalanceSheet(): void {
     this.dataService.getBalanceSheet().subscribe((items) => {
-      this.balanceSheetItems = items;
+      this.balanceSheetItems.set(items);
     });
   }
 
   getTotalDebit(): number {
-    return this.balanceSheetItems.reduce((sum, item) => sum + item.debit, 0);
+    return this.balanceSheetItems().reduce((sum, item) => sum + item.debit, 0);
   }
 
   getTotalCredit(): number {
-    return this.balanceSheetItems.reduce((sum, item) => sum + item.credit, 0);
+    return this.balanceSheetItems().reduce((sum, item) => sum + item.credit, 0);
   }
 
   getTotalBalance(): number {
-    return this.balanceSheetItems.reduce((sum, item) => sum + item.balance, 0);
+    return this.balanceSheetItems().reduce((sum, item) => sum + item.balance, 0);
   }
 }

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-badge.component';
 import { DATA_SERVICE_TOKEN } from '../../../core/services/data.service.token';
@@ -31,7 +31,7 @@ import { Report } from '../../../core/models/transaction.model';
       <div class="reports-section">
         <h2>Relatórios Disponíveis</h2>
         <div class="reports-grid">
-          <div class="report-card" *ngFor="let report of reports">
+          <div class="report-card" *ngFor="let report of reports()">
             <div class="report-header">
               <span class="report-icon">{{ getReportIcon(report.type) }}</span>
               <span class="report-type-badge" [class]="report.type">
@@ -321,7 +321,7 @@ import { Report } from '../../../core/models/transaction.model';
   `]
 })
 export class RelatoriosComponent implements OnInit {
-  reports: Report[] = [];
+  reports = signal<Report[]>([]);
 
   private readonly dataService = inject(DATA_SERVICE_TOKEN);
 
@@ -331,9 +331,9 @@ export class RelatoriosComponent implements OnInit {
 
   loadReports(): void {
     this.dataService.getReports().subscribe((reports) => {
-      this.reports = reports.sort(
+      this.reports.set(reports.sort(
         (a, b) => b.generatedAt.getTime() - a.generatedAt.getTime()
-      );
+      ));
     });
   }
 

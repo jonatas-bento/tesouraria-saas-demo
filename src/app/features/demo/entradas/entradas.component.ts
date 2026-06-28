@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-badge.component';
 import { DATA_SERVICE_TOKEN } from '../../../core/services/data.service.token';
@@ -47,7 +47,7 @@ import { Transaction } from '../../../core/models/transaction.model';
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let transaction of incomeTransactions">
+              <tr *ngFor="let transaction of incomeTransactions()">
                 <td>{{ transaction.date | date: 'dd/MM/yyyy' }}</td>
                 <td>{{ transaction.description }}</td>
                 <td>{{ transaction.category }}</td>
@@ -235,7 +235,7 @@ import { Transaction } from '../../../core/models/transaction.model';
   `]
 })
 export class EntradasComponent implements OnInit {
-  incomeTransactions: Transaction[] = [];
+  incomeTransactions = signal<Transaction[]>([]);
 
   private readonly dataService = inject(DATA_SERVICE_TOKEN);
 
@@ -244,26 +244,33 @@ export class EntradasComponent implements OnInit {
   }
 
   loadIncomeTransactions(): void {
-    this.dataService.getIncomeTransactions().subscribe((transactions) => {
-      this.incomeTransactions = transactions.sort(
-        (a, b) => b.date.getTime() - a.date.getTime()
+  this.dataService.getIncomeTransactions().subscribe({
+    next: (transactions) => {
+      this.incomeTransactions.set(
+        transactions
+          .slice()
+          .sort((a, b) => b.date.getTime() - a.date.getTime())
       );
-    });
-  }
+    },
+    error: (error) => {
+      console.error('[Entradas] erro ao carregar transações:', error);
+    },
+  });
+}
 
   getTotalIncome(): number {
-    return this.incomeTransactions
-      .filter((t) => t.status === 'completed')
-      .reduce((sum, t) => sum + t.amount, 0);
-  }
+  return this.incomeTransactions()
+    .filter((t) => t.status === 'completed')
+    .reduce((sum, t) => sum + t.amount, 0);
+}
 
-  getCompletedCount(): number {
-    return this.incomeTransactions.filter((t) => t.status === 'completed').length;
-  }
+getCompletedCount(): number {
+  return this.incomeTransactions().filter((t) => t.status === 'completed').length;
+}
 
-  getPendingCount(): number {
-    return this.incomeTransactions.filter((t) => t.status === 'pending').length;
-  }
+getPendingCount(): number {
+  return this.incomeTransactions().filter((t) => t.status === 'pending').length;
+}
 
   getStatusLabel(status: string): string {
     const labels: Record<string, string> = {
