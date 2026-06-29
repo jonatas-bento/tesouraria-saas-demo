@@ -67,6 +67,13 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'lotes-conferencia',
+        loadComponent: () =>
+          import('./features/demo/lotes-conferencia/lotes-conferencia.component').then(
+            (m) => m.LotesConferenciaComponent
+          ),
+      },
+      {
         path: 'balancete',
         loadComponent: () =>
           import('./features/demo/balancete/balancete.component').then(
@@ -78,6 +85,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/demo/relatorios/relatorios.component').then(
             (m) => m.RelatoriosComponent
+          ),
+      },
+      {
+        path: 'membros',
+        loadComponent: () =>
+          import('./features/demo/membros/membros.component').then(
+            (m) => m.MembrosComponent
           ),
       },
     ],

@@ -14,14 +14,14 @@ import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-b
       </div>
 
       <div class="demo-warning">
-        <p>⚠️ Modo somente leitura - Dados demonstrativos</p>
+        <p>🧪 Modo demonstração - Dados demonstrativos manipuláveis</p>
       </div>
 
       <div class="welcome-section">
         <div class="welcome-card">
-          <h2>🎯 Sistema de Tesouraria SaaS</h2>
+          <h2>🎯 Portal Administrativo e Financeiro para Igrejas</h2>
           <p>
-            Explore as funcionalidades do sistema de gestão de tesouraria.
+            Explore as funcionalidades do portal para gestão financeira e administrativa da igreja.
             Todos os dados apresentados são fictícios e servem apenas para demonstração.
           </p>
           <p>
@@ -52,6 +52,12 @@ import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-b
             <p>Controle de pagamentos e despesas operacionais.</p>
           </a>
 
+          <a routerLink="/demo/lotes-conferencia" class="module-card">
+            <div class="module-icon">🧾</div>
+            <h3>Lotes de Conferência</h3>
+            <p>Validação do dinheiro contado com as entradas lançadas no sistema.</p>
+          </a>
+
           <a routerLink="/demo/balancete" class="module-card">
             <div class="module-icon">📋</div>
             <h3>Balancete</h3>
@@ -63,6 +69,12 @@ import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-b
             <h3>Relatórios</h3>
             <p>Relatórios financeiros mensais, trimestrais e anuais.</p>
           </a>
+
+          <a routerLink="/demo/membros" class="module-card">
+            <div class="module-icon">👥</div>
+            <h3>Secretaria · Membros</h3>
+            <p>Cadastro, atualização e acompanhamento de membros e visitantes.</p>
+          </a>
         </div>
       </div>
 
@@ -71,7 +83,7 @@ import { DemoBadgeComponent } from '../../../shared/components/demo-badge/demo-b
           <h3>ℹ️ Informações Importantes</h3>
           <ul>
             <li>Esta é uma versão de demonstração com dados fictícios</li>
-            <li>Nenhuma operação de escrita é permitida</li>
+            <li>A demo permite criar, editar, excluir e resetar dados de teste</li>
             <li>Os dados são carregados via API NestJS (<code>localhost:3000</code>)</li>
             <li>Se a API estiver offline, fallback automático para dados mockados locais</li>
           </ul>
