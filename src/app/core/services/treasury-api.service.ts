@@ -1,44 +1,24 @@
-/**
- * Treasury API Service
- *
- * Serviço que consome a API REST do backend NestJS (somente leitura).
- * Implementa a interface IDataService, portanto é intercambiável com MockDataService.
- *
- * Estratégia de fallback:
- *   - Tenta a chamada HTTP ao backend.
- *   - Se o backend estiver indisponível (conexão recusada, timeout, 5xx) e o
- *     ambiente tiver `useMockFallback: true`, loga um aviso no console e
- *     devolve os dados mockados locais de forma transparente.
- *   - Se `useMockFallback: false` (produção), o erro é re-lançado.
- *
- * Endpoints consumidos (GET somente — modo read-only):
- *   GET /api/dashboard              → DashboardSummary
- *   GET /api/transactions           → Transaction[]
- *   GET /api/transactions?type=income  → Transaction[] (entradas)
- *   GET /api/transactions?type=expense → Transaction[] (despesas)
- *   GET /api/balance-sheet          → BalanceSheetItem[]
- *   GET /api/reports                → Report[]
- */
-
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, catchError } from 'rxjs';
+import { Observable, catchError, defer, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 import {
   BalanceSheetItem,
+  CreateTransactionPayload,
   DashboardSummary,
+  DeleteTransactionResponse,
+  DemoResetResponse,
   Report,
   Transaction,
+  UpdateTransactionPayload,
 } from '../models';
 import { IDataService } from './data.service.token';
 import { MockDataService } from './mock-data.service';
 
-/** Representa o formato de data que a API pode retornar (string ISO ou objeto Date) */
 type DateLike = string | Date;
 
-/** Normaliza campos de data que vêm como string ISO do JSON */
 function parseDate(value: DateLike): Date {
   return value instanceof Date ? value : new Date(value);
 }
@@ -52,20 +32,20 @@ export class TreasuryApiService implements IDataService {
   private readonly baseUrl = environment.apiUrl;
   private readonly useFallback = environment.useMockFallback;
 
-  // ─── Dashboard ───────────────────────────────────────────────────────────────
-
   getDashboardSummary(): Observable<DashboardSummary> {
     return this.http.get<DashboardSummary>(`${this.baseUrl}/dashboard`).pipe(
-      this.withFallback('getDashboardSummary', this.mockService.getDashboardSummary())
+      this.withFallback('getDashboardSummary', () =>
+        this.mockService.getDashboardSummary()
+      )
     );
   }
-
-  // ─── Transactions ─────────────────────────────────────────────────────────────
 
   getAllTransactions(): Observable<Transaction[]> {
     return this.http.get<Transaction[]>(`${this.baseUrl}/transactions`).pipe(
       map((list) => list.map(this.normalizeTransaction)),
-      this.withFallback('getAllTransactions', this.mockService.getAllTransactions())
+      this.withFallback('getAllTransactions', () =>
+        this.mockService.getAllTransactions()
+      )
     );
   }
 
@@ -76,7 +56,9 @@ export class TreasuryApiService implements IDataService {
       })
       .pipe(
         map((list) => list.map(this.normalizeTransaction)),
-        this.withFallback('getIncomeTransactions', this.mockService.getIncomeTransactions())
+        this.withFallback('getIncomeTransactions', () =>
+          this.mockService.getIncomeTransactions()
+        )
       );
   }
 
@@ -87,38 +69,79 @@ export class TreasuryApiService implements IDataService {
       })
       .pipe(
         map((list) => list.map(this.normalizeTransaction)),
-        this.withFallback('getExpenseTransactions', this.mockService.getExpenseTransactions())
+        this.withFallback('getExpenseTransactions', () =>
+          this.mockService.getExpenseTransactions()
+        )
       );
   }
 
-  // ─── Balance Sheet ────────────────────────────────────────────────────────────
+  createTransaction(
+    payload: CreateTransactionPayload
+  ): Observable<Transaction> {
+    return this.http
+      .post<Transaction>(`${this.baseUrl}/transactions`, payload)
+      .pipe(
+        map(this.normalizeTransaction),
+        this.withFallback('createTransaction', () =>
+          this.mockService.createTransaction(payload)
+        )
+      );
+  }
+
+  updateTransaction(
+    id: string,
+    payload: UpdateTransactionPayload
+  ): Observable<Transaction> {
+    return this.http
+      .patch<Transaction>(`${this.baseUrl}/transactions/${id}`, payload)
+      .pipe(
+        map(this.normalizeTransaction),
+        this.withFallback('updateTransaction', () =>
+          this.mockService.updateTransaction(id, payload)
+        )
+      );
+  }
+
+  deleteTransaction(id: string): Observable<DeleteTransactionResponse> {
+    return this.http
+      .delete<DeleteTransactionResponse>(`${this.baseUrl}/transactions/${id}`)
+      .pipe(
+        this.withFallback('deleteTransaction', () =>
+          this.mockService.deleteTransaction(id)
+        )
+      );
+  }
+
+  resetDemoData(): Observable<DemoResetResponse> {
+    return this.http.post<DemoResetResponse>(`${this.baseUrl}/demo/reset`, {}).pipe(
+      map((response) => ({
+        ...response,
+        transactions: response.transactions.map(this.normalizeTransaction),
+      })),
+      this.withFallback('resetDemoData', () => this.mockService.resetDemoData())
+    );
+  }
 
   getBalanceSheet(): Observable<BalanceSheetItem[]> {
     return this.http
       .get<BalanceSheetItem[]>(`${this.baseUrl}/balance-sheet`)
       .pipe(
-        this.withFallback('getBalanceSheet', this.mockService.getBalanceSheet())
+        this.withFallback('getBalanceSheet', () =>
+          this.mockService.getBalanceSheet()
+        )
       );
   }
-
-  // ─── Reports ──────────────────────────────────────────────────────────────────
 
   getReports(): Observable<Report[]> {
     return this.http.get<Report[]>(`${this.baseUrl}/reports`).pipe(
       map((list) => list.map(this.normalizeReport)),
-      this.withFallback('getReports', this.mockService.getReports())
+      this.withFallback('getReports', () => this.mockService.getReports())
     );
   }
 
-  // ─── Private helpers ─────────────────────────────────────────────────────────
-
-  /**
-   * Operador RxJS que captura qualquer erro HTTP e, se fallback estiver habilitado,
-   * retorna o Observable de mock local. Caso contrário, re-lança o erro.
-   */
   private withFallback<T>(
     method: string,
-    fallback$: Observable<T>
+    fallbackFactory: () => Observable<T>
   ): (source: Observable<T>) => Observable<T> {
     return (source: Observable<T>) =>
       source.pipe(
@@ -128,20 +151,36 @@ export class TreasuryApiService implements IDataService {
               `[TreasuryApiService] ${method}: API indisponível — usando dados mockados locais.`,
               err?.message ?? err
             );
-            return fallback$;
+
+            return defer(fallbackFactory);
           }
-          throw err;
+
+          return throwError(() => err);
         })
       );
   }
 
-  /** Garante que o campo `date` de Transaction seja um objeto Date */
-  private normalizeTransaction(t: Transaction & { date: DateLike }): Transaction {
-    return { ...t, date: parseDate(t.date) };
-  }
+  private normalizeTransaction = (
+    transaction: Transaction & {
+      date: DateLike;
+      createdAt?: DateLike;
+      updatedAt?: DateLike;
+    }
+  ): Transaction => ({
+    ...transaction,
+    date: parseDate(transaction.date),
+    createdAt: transaction.createdAt
+      ? parseDate(transaction.createdAt)
+      : undefined,
+    updatedAt: transaction.updatedAt
+      ? parseDate(transaction.updatedAt)
+      : undefined,
+  });
 
-  /** Garante que o campo `generatedAt` de Report seja um objeto Date */
-  private normalizeReport(r: Report & { generatedAt: DateLike }): Report {
-    return { ...r, generatedAt: parseDate(r.generatedAt) };
-  }
+  private normalizeReport = (
+    report: Report & { generatedAt: DateLike }
+  ): Report => ({
+    ...report,
+    generatedAt: parseDate(report.generatedAt),
+  });
 }

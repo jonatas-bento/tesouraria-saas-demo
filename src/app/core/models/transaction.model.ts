@@ -1,27 +1,47 @@
-/**
- * Transaction Model
- * 
- * Representa uma transação financeira (entrada ou despesa).
- * Usado em: Dashboard, Entradas, Despesas
- * API Endpoint: GET /api/transactions, GET /api/transactions/:id
- */
+export type TransactionType = 'income' | 'expense';
+export type TransactionStatus = 'pending' | 'completed' | 'cancelled';
+
 export interface Transaction {
   id: string;
   date: Date;
   description: string;
   amount: number;
   category: string;
-  type: 'income' | 'expense';
-  status: 'pending' | 'completed' | 'cancelled';
+  type: TransactionType;
+  status: TransactionStatus;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-/**
- * Dashboard Summary Model
- * 
- * Resumo financeiro para o dashboard.
- * Usado em: Dashboard
- * API Endpoint: GET /api/dashboard/summary
- */
+export interface CreateTransactionPayload {
+  date: string;
+  description: string;
+  amount: number;
+  category: string;
+  type: TransactionType;
+  status: TransactionStatus;
+}
+
+export interface UpdateTransactionPayload {
+  date?: string;
+  description?: string;
+  amount?: number;
+  category?: string;
+  type?: TransactionType;
+  status?: TransactionStatus;
+}
+
+export interface DeleteTransactionResponse {
+  id: string;
+  deleted: boolean;
+}
+
+export interface DemoResetResponse {
+  message: string;
+  transactionsCount: number;
+  transactions: Transaction[];
+}
+
 export interface DashboardSummary {
   totalIncome: number;
   totalExpenses: number;
@@ -29,13 +49,6 @@ export interface DashboardSummary {
   pendingTransactions: number;
 }
 
-/**
- * Balance Sheet Item Model
- * 
- * Item do balancete de verificação.
- * Usado em: Balancete
- * API Endpoint: GET /api/balance-sheet
- */
 export interface BalanceSheetItem {
   account: string;
   debit: number;
@@ -43,13 +56,6 @@ export interface BalanceSheetItem {
   balance: number;
 }
 
-/**
- * Report Model
- * 
- * Representa um relatório financeiro.
- * Usado em: Relatórios
- * API Endpoint: GET /api/reports, GET /api/reports/:id
- */
 export interface Report {
   id: string;
   name: string;
@@ -58,24 +64,12 @@ export interface Report {
   generatedAt: Date;
 }
 
-/**
- * API Response Wrapper
- * 
- * Envelope padrão para respostas da API.
- * Usado em: Todos os endpoints
- */
 export interface ApiResponse<T> {
   data: T;
   message?: string;
   success: boolean;
 }
 
-/**
- * Pagination Metadata
- * 
- * Metadados de paginação para listas.
- * Usado em: Endpoints com paginação
- */
 export interface PaginationMeta {
   page: number;
   pageSize: number;
@@ -83,12 +77,6 @@ export interface PaginationMeta {
   totalPages: number;
 }
 
-/**
- * Paginated Response
- * 
- * Resposta paginada da API.
- * Usado em: GET /api/transactions, GET /api/reports
- */
 export interface PaginatedResponse<T> {
   data: T[];
   meta: PaginationMeta;

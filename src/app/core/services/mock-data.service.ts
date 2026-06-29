@@ -1,40 +1,30 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import {
-  Transaction,
-  DashboardSummary,
   BalanceSheetItem,
+  CreateTransactionPayload,
+  DashboardSummary,
+  DeleteTransactionResponse,
+  DemoResetResponse,
   Report,
+  Transaction,
+  UpdateTransactionPayload,
 } from '../models';
 import {
-  MOCK_TRANSACTIONS,
   MOCK_BALANCE_SHEET,
   MOCK_REPORTS,
+  MOCK_TRANSACTIONS,
 } from '../mocks/transaction.mock';
 
-/**
- * Mock Data Service
- * 
- * Serviço de dados mockados para demonstração.
- * 
- * IMPORTANTE: Este serviço é usado apenas em modo demonstração.
- * Em produção, será substituído por um serviço real que faz chamadas HTTP.
- * 
- * Modo: SOMENTE LEITURA
- * - Não implementa operações de escrita (POST, PUT, DELETE)
- * - Retorna dados mockados locais
- * - Simula comportamento assíncrono com Observables
- * 
- * Para integração futura com API:
- * 1. Criar um TreasuryApiService que implementa a mesma interface
- * 2. Usar HttpClient para fazer chamadas reais
- * 3. Substituir este serviço no app.config.ts ou via providers
- */
 @Injectable({
   providedIn: 'root',
 })
 export class MockDataService {
-  private readonly mockTransactions: Transaction[] = MOCK_TRANSACTIONS;
+  private mockTransactions: Transaction[] = MOCK_TRANSACTIONS.map((item) => ({
+    ...item,
+    date: new Date(item.date),
+  }));
+
   private readonly mockBalanceSheet: BalanceSheetItem[] = MOCK_BALANCE_SHEET;
   private readonly mockReports: Report[] = MOCK_REPORTS;
 
@@ -71,6 +61,80 @@ export class MockDataService {
     );
   }
 
+  getAllTransactions(): Observable<Transaction[]> {
+    return of(this.mockTransactions.slice());
+  }
+
+  createTransaction(
+    payload: CreateTransactionPayload
+  ): Observable<Transaction> {
+    const now = new Date();
+
+    const transaction: Transaction = {
+      id: this.createId(),
+      date: new Date(payload.date),
+      description: payload.description,
+      amount: payload.amount,
+      category: payload.category,
+      type: payload.type,
+      status: payload.status,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    this.mockTransactions = [transaction, ...this.mockTransactions];
+
+    return of(transaction);
+  }
+
+  updateTransaction(
+    id: string,
+    payload: UpdateTransactionPayload
+  ): Observable<Transaction> {
+    const index = this.mockTransactions.findIndex((item) => item.id === id);
+
+    if (index < 0) {
+      throw new Error('Transação não encontrada no mock.');
+    }
+
+    const current = this.mockTransactions[index];
+
+    const updated: Transaction = {
+      ...current,
+      ...payload,
+      date: payload.date ? new Date(payload.date) : current.date,
+      updatedAt: new Date(),
+    };
+
+    this.mockTransactions[index] = updated;
+
+    return of(updated);
+  }
+
+  deleteTransaction(id: string): Observable<DeleteTransactionResponse> {
+    this.mockTransactions = this.mockTransactions.filter(
+      (item) => item.id !== id
+    );
+
+    return of({
+      id,
+      deleted: true,
+    });
+  }
+
+  resetDemoData(): Observable<DemoResetResponse> {
+    this.mockTransactions = MOCK_TRANSACTIONS.map((item) => ({
+      ...item,
+      date: new Date(item.date),
+    }));
+
+    return of({
+      message: 'Dados demonstrativos restaurados com sucesso.',
+      transactionsCount: this.mockTransactions.length,
+      transactions: this.mockTransactions.slice(),
+    });
+  }
+
   getBalanceSheet(): Observable<BalanceSheetItem[]> {
     return of(this.mockBalanceSheet.slice());
   }
@@ -79,7 +143,7 @@ export class MockDataService {
     return of(this.mockReports.slice());
   }
 
-  getAllTransactions(): Observable<Transaction[]> {
-    return of(this.mockTransactions.slice());
+  private createId(): string {
+    return globalThis.crypto?.randomUUID?.() ?? `${Date.now()}`;
   }
 }
