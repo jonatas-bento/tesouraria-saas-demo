@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   template: `
     <div class="demo-badge">
       <span class="demo-badge-icon">🚧</span>
-      <span class="demo-badge-text">Modo Demo</span>
+      <span class="demo-badge-text">Modo Angel</span>
     </div>
   `,
   styles: [`
