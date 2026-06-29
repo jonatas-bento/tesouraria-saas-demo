@@ -1,6 +1,6 @@
 <aside class="sidebar" [class.open]="sidebarOpen()">
   <div class="sidebar-header">
-    <h2 class="sidebar-title">Menu</h2>
+    <h2 class="sidebar-title">Portal Demo</h2>
     <button
       class="sidebar-close"
       (click)="closeSidebar()"
@@ -11,55 +11,90 @@
   </div>
 
   <nav class="sidebar-nav">
-    <a
-      routerLink="/demo/dashboard"
-      routerLinkActive="active"
-      class="sidebar-link"
-      (click)="closeSidebar()"
-    >
-      <span class="sidebar-icon">📊</span>
-      <span class="sidebar-text">Dashboard</span>
-    </a>
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">Tesouraria</span>
 
-    <a
-      routerLink="/demo/entradas"
-      routerLinkActive="active"
-      class="sidebar-link"
-      (click)="closeSidebar()"
-    >
-      <span class="sidebar-icon">💰</span>
-      <span class="sidebar-text">Entradas</span>
-    </a>
+      <a
+        routerLink="/demo/dashboard"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="sidebar-link"
+        (click)="closeSidebar()"
+      >
+        <span class="sidebar-icon">📊</span>
+        <span class="sidebar-text">Dashboard</span>
+      </a>
 
-    <a
-      routerLink="/demo/despesas"
-      routerLinkActive="active"
-      class="sidebar-link"
-      (click)="closeSidebar()"
-    >
-      <span class="sidebar-icon">💳</span>
-      <span class="sidebar-text">Despesas</span>
-    </a>
+      <a
+        routerLink="/demo/entradas"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="sidebar-link"
+        (click)="closeSidebar()"
+      >
+        <span class="sidebar-icon">💰</span>
+        <span class="sidebar-text">Entradas</span>
+      </a>
 
-    <a
-      routerLink="/demo/balancete"
-      routerLinkActive="active"
-      class="sidebar-link"
-      (click)="closeSidebar()"
-    >
-      <span class="sidebar-icon">📈</span>
-      <span class="sidebar-text">Balancete</span>
-    </a>
+      <a
+        routerLink="/demo/despesas"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="sidebar-link"
+        (click)="closeSidebar()"
+      >
+        <span class="sidebar-icon">💳</span>
+        <span class="sidebar-text">Despesas</span>
+      </a>
 
-    <a
-      routerLink="/demo/relatorios"
-      routerLinkActive="active"
-      class="sidebar-link"
-      (click)="closeSidebar()"
-    >
-      <span class="sidebar-icon">📄</span>
-      <span class="sidebar-text">Relatórios</span>
-    </a>
+      <a
+        routerLink="/demo/lotes-conferencia"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="sidebar-link highlight"
+        (click)="closeSidebar()"
+      >
+        <span class="sidebar-icon">🧾</span>
+        <span class="sidebar-text">Lotes de Conferência</span>
+      </a>
+
+      <a
+        routerLink="/demo/balancete"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="sidebar-link"
+        (click)="closeSidebar()"
+      >
+        <span class="sidebar-icon">📈</span>
+        <span class="sidebar-text">Balancete</span>
+      </a>
+
+      <a
+        routerLink="/demo/relatorios"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="sidebar-link"
+        (click)="closeSidebar()"
+      >
+        <span class="sidebar-icon">📄</span>
+        <span class="sidebar-text">Relatórios</span>
+      </a>
+    </div>
+
+    <div class="sidebar-section">
+      <span class="sidebar-section-title">Secretaria</span>
+
+      <a
+        routerLink="/demo/membros"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="sidebar-link"
+        (click)="closeSidebar()"
+      >
+        <span class="sidebar-icon">👥</span>
+        <span class="sidebar-text">Membros</span>
+      </a>
+    </div>
   </nav>
 
   <div class="sidebar-footer">

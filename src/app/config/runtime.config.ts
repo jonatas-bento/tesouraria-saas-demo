@@ -49,7 +49,7 @@ export const runtimeConfig: RuntimeConfig = {
   demoMode: true,
   enableWriteOperations: false,
   showDemoBadge: true,
-  appName: 'Tesouraria SaaS Demo',
+  appName: 'Gestão Inteligente para Igrejas',
   version: '0.0.0',
   environment: environment.production ? 'production' : 'development',
   apiUrl: environment.apiUrl,

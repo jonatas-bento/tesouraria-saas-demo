@@ -34,12 +34,12 @@ export interface BrandConfig {
 }
 
 /**
- * Configuração da marca Tesouraria SaaS Demo
+ * Configuração da marca Gestão Inteligente para Igrejas
  */
 export const brandConfig: BrandConfig = {
-  name: 'Tesouraria SaaS Demo',
+  name: 'Gestão Inteligente para Igrejas',
   shortName: 'Tesouraria',
-  tagline: 'Gestão Financeira Inteligente',
+  tagline: 'Portal Administrativo e Financeiro',
   colors: {
     primary: '#1976d2',
     secondary: '#424242',

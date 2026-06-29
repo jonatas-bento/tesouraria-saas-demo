@@ -4,28 +4,29 @@ import { Component } from '@angular/core';
   selector: 'app-demo-badge',
   template: `
     <div class="demo-badge">
-      <span class="demo-badge-icon">🔍</span>
-      <span class="demo-badge-text">Ambiente de Demonstração</span>
+      <span class="demo-badge-icon">🚧</span>
+      <span class="demo-badge-text">Modo Demo</span>
     </div>
   `,
   styles: [`
-    @use '../../../../styles/variables' as *;
-
     .demo-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background-color: #fff3cd;
-      color: #856404;
+      background: #ff9900;
+      color: #ffffff;
       padding: 8px 16px;
-      border-radius: 20px;
-      font-size: 14px;
-      font-weight: 500;
-      border: 1px solid #ffeaa7;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 800;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 10px 28px rgba(255, 153, 0, 0.26);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
     .demo-badge-icon {
-      font-size: 16px;
+      font-size: 15px;
     }
 
     .demo-badge-text {
@@ -49,10 +50,6 @@ import { Component } from '@angular/core';
       .demo-badge {
         font-size: 11px;
         padding: 5px 10px;
-      }
-
-      .demo-badge-icon {
-        font-size: 12px;
       }
 
       .demo-badge-text {
